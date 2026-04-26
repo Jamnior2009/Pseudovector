@@ -1,18 +1,38 @@
-all: main
+ifeq ($(OS), Windows_NT)
+	RM := del -f
+	OUTPATH := ./out
+	OBJPATH := ./obj
+	SRCPATH := ./src
+	EXE := .exe
+	MKDIR_OBJ := if not exist obj mkdir obj
+else ifeq ($(shell uname), Linux)
+	RM := rm -f
+	OUTPATH := ./out
+	OBJPATH := ./obj
+	SRCPATH := ./src
+	EXE :=
+	MKDIR_OBJ := mkdir -p obj
+endif
 
-main: main.o vector.o
-	g++ main.o vector.o -o main
+CLANG := clang++
+TARGET := main$(EXE)
 
-main.o:
-	g++ -c main.cpp -o main.o
+SRCS := $(wildcard $(SRCPATH)/*.cpp)
+OBJS := $(patsubst $(SRCPATH)/%.cpp, obj/%.o, $(SRCS))
 
-vector.o:
-	g++ -c vector.cpp -o vector.o
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CLANG) $^ -o $(OUTPATH)/$@ 
+
+obj/%.o: $(SRCPATH)/%.cpp | $(OBJPATH)
+	$(shell $(MKDIR_OBJ))
+	$(CLANG) -c $< -o $@
 
 clean:
-	rm -f main *.o
+	$(RM) $(OUTPATH)/* $(OBJPATH)/*
 
 run:
-	./main
+	$(OUTPATH)/$(TARGET)
 
 .PHONY: all clean run
