@@ -17,17 +17,24 @@ namespace Pseudovector
     public:
         vector();
 
+        // Information methods
         bool isEmpty() const;
         bool isFull() const;
-
-        bool reserv(std::size_t newMaxSize);
         std::size_t retSize() const;
-        bool pushBack(type value);
-        bool pushBack(type* arr, std::size_t size);
+        std::size_t getMaxSize() const;
+
+        // Access methods
         type& getValue(std::size_t index);
         type& at(std::size_t index);
+
+        // Modification methods
+        bool pushBack(type value);
+        bool pushBack(type* arr, std::size_t size);
         bool remove(std::size_t index);
         bool clean();
+
+        // Memory management methods
+        bool reserv(std::size_t newMaxSize);
 
         ~vector();
     };

@@ -10,6 +10,8 @@ Pseudovector::vector::vector()
     maxSizeSet = false;
 }
 
+// Information methods
+
 bool Pseudovector::vector::isEmpty() const
 {
     return size == 0;
@@ -20,50 +22,37 @@ bool Pseudovector::vector::isFull() const
     return size == maxSize && maxSizeSet;
 }
 
-bool Pseudovector::vector::reserv(std::size_t newMaxSize)
-{
-    maxSizeSet = true;
-    maxSize = newMaxSize;
-
-    
-    if(!isEmpty() && size < maxSize)
-    {
-        type* temp = new type[size];
-
-        for(std::size_t i = 0; i < size; i++)
-            temp[i] = arr[i];
-
-        delete[] arr;
-        arr = new type[maxSize];
-     
-        for(std::size_t i = 0; i < maxSize; i++)
-            arr[i] = temp[i];
-
-        delete[] temp;
-    }
-    else if(!isEmpty() && size >= maxSize)
-    {
-        type* temp = new type[maxSize];
-
-        for(std::size_t i = 0; i < maxSize; i++)
-            temp[i] = arr[i];
-
-        delete[] arr;
-        arr = new type[maxSize];
-
-        for(std::size_t i = 0; i < maxSize; i++)
-            arr[i] = temp[i];
-
-        delete[] temp;
-    }
-    
-    return true;
-}
-
 std::size_t Pseudovector::vector::retSize() const
 {
     return size;
 }
+
+std::size_t Pseudovector::vector::getMaxSize() const
+{
+    if(!maxSizeSet)
+    return 0;
+    
+    return maxSize;
+}
+
+// Access methods
+
+Pseudovector::type& Pseudovector::vector::getValue(std::size_t index)
+{
+    if(isEmpty() || index >= size)
+    {
+        throw std::out_of_range("Index out of bounds");
+    }
+
+    return arr[index];
+}
+
+Pseudovector::type& Pseudovector::vector::at(std::size_t index)
+{
+    return getValue(index % size);
+}
+
+// Modification methods
 
 bool Pseudovector::vector::pushBack(type value)
 {
@@ -115,20 +104,6 @@ bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
     return true;
 }
 
-Pseudovector::type& Pseudovector::vector::getValue(std::size_t index)
-{
-    if(isEmpty() || index >= size)
-    {
-        throw std::out_of_range("Index out of bounds");
-    }
-
-    return arr[index];
-}
-
-Pseudovector::type& Pseudovector::vector::at(std::size_t index)
-{
-    return getValue(index % size);
-}
 
 bool Pseudovector::vector::remove(std::size_t index)
 {
@@ -168,6 +143,48 @@ bool Pseudovector::vector::clean()
         size = 0;
     }
 
+    return true;
+}
+
+// Memory management methods
+
+bool Pseudovector::vector::reserv(std::size_t newMaxSize)
+{
+    maxSizeSet = true;
+    maxSize = newMaxSize;
+
+    
+    if(!isEmpty() && size < maxSize)
+    {
+        type* temp = new type[size];
+
+        for(std::size_t i = 0; i < size; i++)
+            temp[i] = arr[i];
+
+        delete[] arr;
+        arr = new type[maxSize];
+     
+        for(std::size_t i = 0; i < maxSize; i++)
+            arr[i] = temp[i];
+
+        delete[] temp;
+    }
+    else if(!isEmpty() && size >= maxSize)
+    {
+        type* temp = new type[maxSize];
+
+        for(std::size_t i = 0; i < maxSize; i++)
+            temp[i] = arr[i];
+
+        delete[] arr;
+        arr = new type[maxSize];
+
+        for(std::size_t i = 0; i < maxSize; i++)
+            arr[i] = temp[i];
+
+        delete[] temp;
+    }
+    
     return true;
 }
 

@@ -1,3 +1,5 @@
+// Mateusz Ostaszewski, Szymon Trzaskoma, Jan Stańczak
+
 #include <iostream>
 
 #include "headers/vector.hpp"
