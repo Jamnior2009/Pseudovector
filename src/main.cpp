@@ -7,7 +7,7 @@
 int main()
 {
     Pseudovector::vector vec;
-    vec.reserv(5);
+    vec.reserve(5);
     vec.pushBack(10);
     vec.pushBack(20);
     vec.pushBack(30);

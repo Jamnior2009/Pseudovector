@@ -34,7 +34,7 @@ namespace Pseudovector
         bool clean();
 
         // Memory management methods
-        bool reserv(std::size_t newMaxSize);
+        bool reserve(std::size_t newMaxSize);
 
         ~vector();
     };

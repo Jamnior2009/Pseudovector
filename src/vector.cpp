@@ -30,7 +30,7 @@ std::size_t Pseudovector::vector::retSize() const
 std::size_t Pseudovector::vector::getMaxSize() const
 {
     if(!maxSizeSet)
-    return 0;
+        return 0;
     
     return maxSize;
 }
@@ -108,9 +108,7 @@ bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
 bool Pseudovector::vector::remove(std::size_t index)
 {
     if(isEmpty() || index >= size)
-    {
-        throw std::out_of_range("Index out of bounds");
-    }
+        return false;
     else
     {
         type* temp = new type[size - 1];
@@ -148,7 +146,7 @@ bool Pseudovector::vector::clean()
 
 // Memory management methods
 
-bool Pseudovector::vector::reserv(std::size_t newMaxSize)
+bool Pseudovector::vector::reserve(std::size_t newMaxSize)
 {
     maxSizeSet = true;
     maxSize = newMaxSize;
