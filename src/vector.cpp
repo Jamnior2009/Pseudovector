@@ -56,7 +56,7 @@ Pseudovector::type& Pseudovector::vector::at(std::size_t index)
 
 bool Pseudovector::vector::pushBack(type value)
 {
-    if(!isFull())
+    if(isFull())
         return false;
     else
     {
