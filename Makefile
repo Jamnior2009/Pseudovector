@@ -4,7 +4,7 @@ ifeq ($(OS), Windows_NT)
 	OBJPATH := ./obj
 	SRCPATH := ./src
 	EXE := .exe
-	MKDIR_OBJ := if not exist obj mkdir obj
+	MKDIR_OBJ := mkdir obj
 else ifeq ($(shell uname), Linux)
 	RM := rm -f
 	OUTPATH := ./out
