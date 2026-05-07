@@ -18,9 +18,14 @@ Pseudovector/
     └── [execuarray files]
 ```
 
-**Operating system:**
+**Note:**
 
-- Linux distribution: Fedora 43 KDE Plasma
+- Pseudovectro does not conform to the generic programming paradigm.
+
+**Operating systems:**
+
+- Linux distribution: Fedora 44 KDE Plasma
+- Windows 11
 
 **Files:**
 
