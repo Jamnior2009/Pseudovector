@@ -2,24 +2,25 @@
 
 #include <stdexcept>
 
+constexpr std::size_t DEFAULT_MAX_SIZE = 10; 
+
 Pseudovector::vector::vector()
 {
     arr = nullptr;
     size = 0;
-    maxSize = 0;
-    maxSizeSet = false;
+    maxSize = DEFAULT_MAX_SIZE;
 }
 
 // Information methods
 
+bool Pseudovector::vector::isFull() const
+{
+    return size == maxSize;
+}
+
 bool Pseudovector::vector::isEmpty() const
 {
     return size == 0;
-}
-
-bool Pseudovector::vector::isFull() const
-{
-    return size == maxSize && maxSizeSet;
 }
 
 std::size_t Pseudovector::vector::retSize() const
@@ -27,19 +28,11 @@ std::size_t Pseudovector::vector::retSize() const
     return size;
 }
 
-std::size_t Pseudovector::vector::getMaxSize() const
-{
-    if(!maxSizeSet)
-        return 0;
-    
-    return maxSize;
-}
-
 // Access methods
 
 Pseudovector::type& Pseudovector::vector::getValue(std::size_t index)
 {
-    if(isEmpty() || index >= size)
+    if(isEmpty() || index > size)
     {
         throw std::out_of_range("Index out of bounds");
     }
@@ -47,7 +40,7 @@ Pseudovector::type& Pseudovector::vector::getValue(std::size_t index)
     return arr[index];
 }
 
-Pseudovector::type& Pseudovector::vector::at(std::size_t index)
+Pseudovector::type Pseudovector::vector::at(std::size_t index)
 {
     return getValue(index % size);
 }
@@ -56,22 +49,32 @@ Pseudovector::type& Pseudovector::vector::at(std::size_t index)
 
 bool Pseudovector::vector::pushBack(type value)
 {
-    if(isFull())
-        return false;
-    else
+    if(isEmpty())
+    {
+        arr = new type[maxSize];
+        size++;
+        arr[size - 1] = value;
+    }
+    else if(isFull())
     {
         type* temp = new type[size];
         for(std::size_t i = 0; i < size; i++)
             temp[i] = arr[i];
 
-        size++;
-
         delete[] arr;
-        arr = new type[size];
-        for(std::size_t i = 0; i < size - 1; i++)
+
+        maxSize += DEFAULT_MAX_SIZE;
+        arr = new type[maxSize];
+        for(std::size_t i = 0; i < size; i++)
             arr[i] = temp[i];
-            
+
         delete[] temp;
+        size++;
+        arr[size - 1] = value;
+    }
+    else
+    {
+        size++;
         arr[size - 1] = value;
     }
 
@@ -80,25 +83,44 @@ bool Pseudovector::vector::pushBack(type value)
 
 bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
 {
-    if((this->size + size > maxSize && maxSizeSet) || isFull())
-        return false;
-    else
+    if(isEmpty())
+    {
+        this->size = size;
+        while(maxSize < this->size)
+            maxSize += DEFAULT_MAX_SIZE;
+
+        this->arr = new type[maxSize];
+        for(std::size_t i = 0; i < this->size; i++)
+            this->arr[i] = arr[i];
+    }
+    else if(isFull() || this->size + size > maxSize)
     {
         type* temp = new type[this->size];
         for(std::size_t i = 0; i < this->size; i++)
             temp[i] = this->arr[i];
 
-        this->size += size;
-
         delete[] this->arr;
-        this->arr = new type[this->size];
-        for(std::size_t i = 0; i < this->size - size; i++)
+
+        while(maxSize < this->size + size)
+            maxSize += DEFAULT_MAX_SIZE;
+
+        this->arr = new type[maxSize];
+        for(std::size_t i = 0; i < this->size; i++)
             this->arr[i] = temp[i];
-            
+
         delete[] temp;
 
         for(std::size_t i = 0; i < size; i++)
-            this->arr[this->size - size + i] = arr[i];
+            this->arr[this->size + i] = arr[i];
+
+        this->size += size;
+    }
+    else
+    {
+        for(std::size_t i = 0; i < size; i++)
+            this->arr[this->size + i] = arr[i];
+
+        this->size += size;
     }
 
     return true;
@@ -109,22 +131,29 @@ bool Pseudovector::vector::remove(std::size_t index)
 {
     if(isEmpty() || index >= size)
         return false;
+    else if(size == 1)
+    {
+        delete[] arr;
+        arr = nullptr;
+        size = 0;
+        maxSize = DEFAULT_MAX_SIZE;
+    }
     else
     {
         type* temp = new type[size - 1];
-        for(std::size_t i = 0; i < index; i++)
-            temp[i] = arr[i];
-        for(std::size_t i = index + 1; i < size; i++)
-            temp[i - 1] = arr[i];
 
-        size--;
+        for(std::size_t i = 0; i < size; i++)
+            if(i != index)
+                temp[i < index ? i : i - 1] = arr[i];
 
         delete[] arr;
-        arr = new type[size];
-        for(std::size_t i = 0; i < size; i++)
+        arr = new type[maxSize];
+
+        for(std::size_t i = 0; i < size - 1; i++)
             arr[i] = temp[i];
-            
+
         delete[] temp;
+        size--;
     }
 
     return true;
@@ -139,6 +168,7 @@ bool Pseudovector::vector::clean()
         delete[] arr;
         arr = nullptr;
         size = 0;
+        maxSize = DEFAULT_MAX_SIZE;
     }
 
     return true;
@@ -148,39 +178,44 @@ bool Pseudovector::vector::clean()
 
 bool Pseudovector::vector::reserve(std::size_t newMaxSize)
 {
-    maxSizeSet = true;
     maxSize = newMaxSize;
 
-    
-    if(!isEmpty() && size < maxSize)
+    if(maxSize < size && arr != nullptr)
     {
-        type* temp = new type[size];
-
+        size = maxSize;
+        type* temp = new type[maxSize];
         for(std::size_t i = 0; i < size; i++)
             temp[i] = arr[i];
 
         delete[] arr;
+
         arr = new type[maxSize];
-     
-        for(std::size_t i = 0; i < maxSize; i++)
+        for(std::size_t i = 0; i < size; i++)
+            arr[i] = temp[i];
+        
+        delete[] temp;
+    }
+    else if(maxSize > size && arr != nullptr)
+    {
+        type* temp = new type[size];
+        for(std::size_t i = 0; i < size; i++)
+            temp[i] = arr[i];
+
+        delete[] arr;
+
+        arr = new type[maxSize];
+        for(std::size_t i = 0; i < size; i++)
             arr[i] = temp[i];
 
         delete[] temp;
     }
-    else if(!isEmpty() && size >= maxSize)
+    else if(maxSize < size && arr == nullptr)
     {
-        type* temp = new type[maxSize];
-
-        for(std::size_t i = 0; i < maxSize; i++)
-            temp[i] = arr[i];
-
-        delete[] arr;
+        size = maxSize;
+    }
+    else if(maxSize > size && arr == nullptr)
+    {
         arr = new type[maxSize];
-
-        for(std::size_t i = 0; i < maxSize; i++)
-            arr[i] = temp[i];
-
-        delete[] temp;
     }
     
     return true;
