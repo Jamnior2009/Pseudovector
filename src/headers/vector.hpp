@@ -12,20 +12,20 @@ namespace Pseudovector
     private:
         type* arr;
         std::size_t size, maxSize;
-        bool maxSizeSet;
+
+        // Information methods
+        bool isFull() const;
 
     public:
         vector();
 
         // Information methods
         bool isEmpty() const;
-        bool isFull() const;
         std::size_t retSize() const;
-        std::size_t getMaxSize() const;
 
         // Access methods
         type& getValue(std::size_t index);
-        type& at(std::size_t index);
+        type at(std::size_t index);
 
         // Modification methods
         bool pushBack(type value);
