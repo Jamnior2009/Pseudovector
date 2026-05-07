@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-constexpr std::size_t DEFAULT_MAX_SIZE = 10; 
+constexpr std::size_t DEFAULT_MAX_SIZE = 10;
 
 Pseudovector::vector::vector()
 {

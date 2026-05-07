@@ -39,7 +39,7 @@ int main()
 
     std::cout << "After cleaning the vector, is it empty? " << (vec.isEmpty() ? "Yes" : "No") << std::endl;
 
-    std::cout << "Trying to access element at index 0 after cleaning: ";
+    std::cout << "Trying to access element at index 0 after cleaning: " << std::endl;
     try
     {
         std::cout << vec.getValue(0) << std::endl;
