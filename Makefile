@@ -36,3 +36,5 @@ run:
 	$(OUTPATH)/$(TARGET)
 
 .PHONY: all clean run
+
+# THX GEMINI
