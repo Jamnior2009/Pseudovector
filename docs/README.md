@@ -20,7 +20,6 @@ Pseudovector/
 
 **Note:**
 
-- The documentation is outdated
 - Pseudovectro does not conform to the generic programming paradigm.
 
 **Operating systems:**
