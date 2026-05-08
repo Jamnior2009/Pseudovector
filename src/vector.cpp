@@ -54,6 +54,8 @@ bool Pseudovector::vector::pushBack(type value)
         arr = new type[maxSize];
         size++;
         arr[size - 1] = value;
+
+        return true;
     }
     else if(isFull())
     {
@@ -71,14 +73,18 @@ bool Pseudovector::vector::pushBack(type value)
         delete[] temp;
         size++;
         arr[size - 1] = value;
+
+        return true;
     }
     else
     {
         size++;
         arr[size - 1] = value;
+        
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
@@ -92,6 +98,8 @@ bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
         this->arr = new type[maxSize];
         for(std::size_t i = 0; i < this->size; i++)
             this->arr[i] = arr[i];
+
+        return true;
     }
     else if(isFull() || this->size + size > maxSize)
     {
@@ -114,6 +122,8 @@ bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
             this->arr[this->size + i] = arr[i];
 
         this->size += size;
+
+        return true;
     }
     else
     {
@@ -121,9 +131,11 @@ bool Pseudovector::vector::pushBack(type* arr, std::size_t size)
             this->arr[this->size + i] = arr[i];
 
         this->size += size;
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 

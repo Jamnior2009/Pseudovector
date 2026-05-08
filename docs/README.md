@@ -46,29 +46,28 @@ Pseudovector/
 
 | Variable | Usage |
 | -------- | ----- |
-| ```arr``` | Pointer pointing at the begining of the dynamic array which stores values |
-| ```size``` | Stores the current size of the dynamic array |
-| ```maxSize``` | Stores the max possible size of the dynamic array, is used when the value of the ```maxSizeSet``` equals ```true``` |
-| ```maxSizeSet``` | Is true when the ```maxSize``` is set |
+| ```arr``` | Pointer pointing at the begining of the dynamic array which stores values. |
+| ```size``` | Stores the current size of the dynamic array. |
+| ```maxSize``` | Stores the max possible size of the dynamic array, is used when the value of the ```maxSizeSet``` equals ```true```. |
+| ```DEFAULT_MAX_SIZE``` | Default value for ```maxSize```, and a value that we use to increase the ```maxSize``` when ```size``` equals ```maxSize```. |
 
 **Methods:**
 
 | Method | Action |
 | ----------- | ----------- |
-| ```vector()``` | Create ```vector``` class object |
-| ```~vector()``` | Deletes ```vector``` object from memory and frees the memory |
-| Information methods |  |
-| ```isEmpty()``` | Returns ```true``` if size equals 0 and ```false``` if size is above 0 |
-| ```isFull()``` | Returns ```true``` if ```size``` equals the ```maxSize``` and ```maxSizeSet``` is ```true``` |
-| ```retSize()``` | Returns the ```size``` of the dynamic array [```arr```] |
-| ```getMaxSize()``` | If ```maxSizeSet``` equals ```true```, the method returns ```maxSize```, else method returns 0 |
-| Access methods |  |
-| ```getValue( index )``` | If ```size``` from ```vector``` equals 0 or ```index``` is greater than ```size``` method, ```throws``` an exception ```std::out_of_range``` like the ```at()``` from the real ```std::vector``` else returns the ```value``` from the dynamic array [```arr```] at the specified ```index``` |
-| ```at( index )``` | Method returns the ```value``` from the dynamic array [```arr```] at the index of resulting from the ```index % size``` operation |
-| Modyfication methods |  |
-| ```pushBack( value )``` | Returns ```false``` when it cannot add ```value``` at the end of the dynamic array [```arr```]. Returns ```true``` if increasing ```size``` and adding ```value``` at the end of the dynamic array [```arr```] is successful |
-| ```pushBack( arr, size )``` | Returns ```false``` when it cannot add ```values``` from the dynamic array [```arr```] being an argument of the method, and a sum of ```size``` from ```vector``` and ```size``` from the method argument are greater than ```maxSize``` and ```maxSizeSet``` equals ```true```. Returns ```true``` if increasing ```size``` by ```size``` from the method and adding ```values``` from the dynamic array ```arr``` to ```arr``` from ```vector``` are both successful |
-| ```remove( index )``` | Removes the ```value``` at given index and shrinks the dynamic array [```arr```] to match new size. Returns true if action succeded, else returns false |
-| ```clean()``` | If dynamic array [```arr```] is not empty, frees the memory and sets the ```size``` to 0, else returns ```false``` |
-| Memmory managment methods |  |
-| ```reserve( newMaxSize )``` | Takes a new non-negative integer value for ```maxSize``` and changes ```maxSizeSet``` to ```true```. If ```vector``` object cointains some values and the ```size``` is lower than ```newMaxSize```, the dynamic array [```arr```] does not change. If ```size``` is greater than ```newMaxSize``` the dynamic array [```arr```] shrinks to ```newMaxSize``` and it keeps only the values from the 0 index to ```newMaxSize``` - 1 |
+| ```vector()``` | Create ```vector``` class object. |
+| ```~vector()``` | Deletes ```vector``` object from memory and frees the memory. |
+| **Information methods** |  |
+| **Private Method** ```isFull()``` | Returns ```true``` if ```size``` equals the ```maxSize``` and ```maxSizeSet``` is ```true```. |
+| ```isEmpty()``` | Returns ```true``` if size equals 0 and ```false``` if size is above 0. |
+| ```retSize()``` | Returns the ```size``` of the dynamic array [```arr```]. |
+| **Access methods** |  |
+| ```getValue( index )``` | If ```size``` from ```vector``` equals 0 or ```index``` is greater than ```size``` method, ```throws``` an exception ```std::out_of_range``` like the ```at()``` from the real ```std::vector``` else returns the ```value``` from the dynamic array [```arr```] at the specified ```index```. |
+| ```at( index )``` | Method returns the ```value``` from the dynamic array [```arr```] at the index of resulting from the ```index % size``` operation. |
+|**Modyfication methods** |  |
+| ```pushBack( value )``` | Returns ```true``` if increasing ```size``` and adding ```value``` at the end of the dynamic array [```arr```] is successful. If needed incerase ```maxSize``` by ```DEFAULT_MAX_SIZE```. Returns false if failed. |
+| ```pushBack( arr, size )``` | Returns ```true``` if increasing ```size``` by ```size``` from the method and adding ```values``` from the dynamic array ```arr``` to ```arr``` from ```vector``` are both successful. If needed increase ```maxSize``` by ```DEFAULT_MAX_SIZE``` to match sum of ```size``` and ```size``` from the method argument. Returns ```false``` if failed. |
+| ```remove( index )``` | Removes the ```value``` at given index and shrinks the dynamic array [```arr```] to match new size. Returns true if action succeded, else returns false. |
+| ```clean()``` | If dynamic array [```arr```] is not empty, frees the memory and sets the ```size``` to 0, else returns ```false```. |
+| **Memmory managment methods** |  |
+| ```reserve( newMaxSize )``` | Takes a new non-negative integer value for ```maxSize```. If ```vector``` object cointains some values and the ```size``` is lower than ```newMaxSize```, the dynamic array [```arr```] does not change. If ```size``` is greater than ```newMaxSize``` the dynamic array [```arr```] shrinks to ```newMaxSize``` and it keeps only the values from the 0 index to ```newMaxSize``` - 1. If dynamic array [```arr```] equals ```nullptr``` the actual size of the dynamic array [```arr```] equals ```newMaxSize```. |
