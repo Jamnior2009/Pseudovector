@@ -5,7 +5,7 @@
 
 namespace Pseudovector
 {
-    using type = int;
+    using type = int; // You can change this to any type you want.
 
     class vector
     {
